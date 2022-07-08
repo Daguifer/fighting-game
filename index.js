@@ -22,12 +22,12 @@ const background = new Sprite({
 
 const shop = new Sprite({
   position: {
-    x: 610,
+    x: 620,
     y: 160,
   },
   imageSrc: "./assets/shop.png",
   scale: 2.5,
-  framesMax: 6
+  framesMax: 6,
 });
 
 //Creo al jugador
@@ -45,6 +45,36 @@ const player = new Fighter({
   offset: {
     x: 0,
     y: 0,
+  },
+
+  imageSrc: "./assets/samuraiMack/Idle.png",
+  framesMax: 8,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 157,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./assets/samuraiMack/Idle.png",
+      framesMax: 8,
+    },
+    run: {
+      imageSrc: "./assets/samuraiMack/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./assets/samuraiMack/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./assets/samuraiMack/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./assets/samuraiMack/Attack1.png",
+      framesMax: 6,
+    },
   },
 });
 
@@ -105,12 +135,12 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   //Implementamos el fondo
-  background.update()
-  shop.update()
+  background.update();
+  shop.update();
 
   //Utilizo update en vez de draw para que vaya redibujandose
   player.update();
-  enemy.update();
+  //enemy.update();
 
   //Para que no siga caminando solo
   player.velocity.x = 0;
@@ -118,10 +148,22 @@ function animate() {
 
   //Checkeo si las teclas están pulsadas
   //Update 1: nos quedamos con la ultima tecla pulsada
+  player.switchSprite("idle");
   if (keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -5;
+    player.switchSprite("run");
   } else if (keys.d.pressed && player.lastKey === "d") {
     player.velocity.x = 5;
+    player.switchSprite("run");
+  } else {
+    player.switchSprite("idle");
+  }
+
+  //Defino la animación del salto
+  if (player.velocity.y < 0) {
+    player.switchSprite("jump");
+  }else if(player.velocity.y > 0){
+    player.switchSprite("fall")
   }
 
   //Movimiento del Enemigo/J2
@@ -173,7 +215,7 @@ window.addEventListener("keydown", (event) => {
       break;
 
     case "w":
-      player.velocity.y = -20;
+      player.velocity.y = -15;
       break;
 
     case " ":
