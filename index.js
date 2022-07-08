@@ -157,6 +157,37 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+//Función para determinar ganador (limpieza)
+function determineWinner({ player, enemy, timerId }) {
+  clearTimeout(timerId)
+  document.querySelector("#displayText").style.display = "flex";
+  if (player.health === enemy.health) {
+    document.querySelector("#displayText").innerHTML = "Empate";
+  } else if (player.health > enemy.health) {
+    document.querySelector("#displayText").innerHTML = "Gana el Jugador 1";
+  } else if (player.health < enemy.health) {
+    document.querySelector("#displayText").innerHTML = "Gana el Jugador 2";
+  }
+}
+
+//Implemento la función del timer para que vaya bajando el tiempo.
+
+let timer = 60;
+let timerId
+function decreaseTimer() {
+  if (timer > 0) {
+    timerId = setTimeout(decreaseTimer, 1000);
+    timer--;
+    document.querySelector("#timer").innerHTML = timer;
+  }
+
+  if (timer === 0) {
+    determineWinner({ player, enemy });
+  }
+}
+
+decreaseTimer();
+
 //Creo la función para animar los Sprites
 function animate() {
   window.requestAnimationFrame(animate);
@@ -191,9 +222,9 @@ function animate() {
     rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
     player.isAttacking
   ) {
-    player.isAttacking = false
-    enemy.health -= 20
-    document.querySelector('#enemyHealth').style.width = enemy.health + "%"
+    player.isAttacking = false;
+    enemy.health -= 20;
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
 
   if (
@@ -201,8 +232,14 @@ function animate() {
     enemy.isAttacking
   ) {
     enemy.isAttacking = false;
-    player.health -= 20
-    document.querySelector('#playerHealth').style.width = player.health + "%"
+    player.health -= 20;
+    document.querySelector("#playerHealth").style.width = player.health + "%";
+  }
+
+  //Acabar la partida en base a la vida de los jugadores
+
+  if (enemy.health <= 0 || player.health <= 0) {
+    determineWinner({ player, enemy, timerId });
   }
 }
 
