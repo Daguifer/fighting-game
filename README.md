@@ -9,7 +9,7 @@ Realizado con HTML Canvas y JavaScript.
 -------------------------------------How to Exe-------------------------------------
 
 1. Descargar los archivos
-2. Descomprimir
+2. Extraer
 3. Abrir el index.html
 
 
