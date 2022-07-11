@@ -3,6 +3,9 @@ movimiento y posición en el plano, etc...
 
 Realizado con HTML Canvas y JavaScript.
 
+![image](https://user-images.githubusercontent.com/52897045/178221823-1b0fb30b-9b85-4f1a-a8bd-87d05db703ad.png)
+
+
 -------------------------------------How to Exe-------------------------------------
 
 1. Descargar los archivos
