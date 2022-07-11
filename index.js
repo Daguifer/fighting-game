@@ -75,15 +75,23 @@ const player = new Fighter({
       imageSrc: "./assets/samuraiMack/Attack1.png",
       framesMax: 6,
     },
+    takeHit: {
+      imageSrc: "./assets/samuraiMack/Take Hit - white silhouette.png",
+      framesMax: 4,
+    },
+    death: {
+      imageSrc: "./assets/samuraiMack/Death.png",
+      framesMax: 6,
+    },
   },
   attackBox: {
     offset: {
       x: 100,
-      y: 50
+      y: 50,
     },
     width: 160,
-    height: 50
-  }
+    height: 50,
+  },
 });
 
 //Creo al enemigo
@@ -131,15 +139,22 @@ const enemy = new Fighter({
       imageSrc: "./assets/kenji/Attack1.png",
       framesMax: 4,
     },
-    
+    takeHit: {
+      imageSrc: "./assets/kenji/Take hit.png",
+      framesMax: 3,
+    },
+    death: {
+      imageSrc: "./assets/kenji/Death.png",
+      framesMax: 7,
+    },
   },
   attackBox: {
     offset: {
       x: -170,
-      y: 50
+      y: 50,
     },
     width: 170,
-    height: 50
+    height: 50,
   },
 
   color: "blue",
@@ -220,7 +235,7 @@ function animate() {
   } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
     enemy.velocity.x = 5;
     enemy.switchSprite("run");
-  }else {
+  } else {
     enemy.switchSprite("idle");
   }
 
@@ -231,38 +246,36 @@ function animate() {
     enemy.switchSprite("fall");
   }
 
-
-  //Detección de colisión
+  //Detección de colisión e impacto al enemigo
   if (
     rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
-    player.isAttacking && player.framesCurrent === 4
+    player.isAttacking &&
+    player.framesCurrent === 4
   ) {
+    enemy.takeHit();
     player.isAttacking = false;
-    enemy.health -= 20;
     document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
 
   //Si el jugador falla
-  if (player.isAttacking && player.framesCurrent === 4){
-    player.isAttacking = false
+  if (player.isAttacking && player.framesCurrent === 4) {
+    player.isAttacking = false;
   }
-
-
 
   if (
     rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
-    enemy.isAttacking && enemy.framesCurrent === 2
+    enemy.isAttacking &&
+    enemy.framesCurrent === 2
   ) {
+    player.takeHit();
     enemy.isAttacking = false;
-    player.health -= 20;
     document.querySelector("#playerHealth").style.width = player.health + "%";
   }
 
   //Si el enemigo falla
-  if (enemy.isAttacking && enemy.framesCurrent === 2){
-    enemy.isAttacking = false
+  if (enemy.isAttacking && enemy.framesCurrent === 2) {
+    enemy.isAttacking = false;
   }
-
 
   //Acabar la partida en base a la vida de los jugadores
 
@@ -275,43 +288,49 @@ animate();
 
 //Voy a implementar el movimiento con event listeners
 window.addEventListener("keydown", (event) => {
-  switch (event.key) {
-    case "d":
-      keys.d.pressed = true;
-      player.lastKey = "d";
-      break;
+  if (!player.dead) {
+    switch (event.key) {
+      case "d":
+        keys.d.pressed = true;
+        player.lastKey = "d";
+        break;
 
-    case "a":
-      keys.a.pressed = true;
-      player.lastKey = "a";
-      break;
+      case "a":
+        keys.a.pressed = true;
+        player.lastKey = "a";
+        break;
 
-    case "w":
-      player.velocity.y = -20;
-      break;
+      case "w":
+        player.velocity.y = -20;
+        break;
 
-    case " ":
-      player.attack();
-      break;
+      case " ":
+        player.attack();
+        break;
+    }
 
-    //Teclas del Enemigo/J2
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      enemy.lastKey = "ArrowRight";
-      break;
+    if (!enemy.dead) {
+      switch (event.key) {
+        //Teclas del Enemigo/J2
+        case "ArrowRight":
+          keys.ArrowRight.pressed = true;
+          enemy.lastKey = "ArrowRight";
+          break;
 
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      enemy.lastKey = "ArrowLeft";
-      break;
+        case "ArrowLeft":
+          keys.ArrowLeft.pressed = true;
+          enemy.lastKey = "ArrowLeft";
+          break;
 
-    case "ArrowUp":
-      enemy.velocity.y = -20;
-      break;
+        case "ArrowUp":
+          enemy.velocity.y = -20;
+          break;
 
-    case "ArrowDown":
-      enemy.attack();
-      break;
+        case "ArrowDown":
+          enemy.attack();
+          break;
+      }
+    }
   }
   console.log(event.key);
 });
