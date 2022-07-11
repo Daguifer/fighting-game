@@ -76,6 +76,14 @@ const player = new Fighter({
       framesMax: 6,
     },
   },
+  attackBox: {
+    offset: {
+      x: 100,
+      y: 50
+    },
+    width: 160,
+    height: 50
+  }
 });
 
 //Creo al enemigo
@@ -93,6 +101,45 @@ const enemy = new Fighter({
   offset: {
     x: -50,
     y: 0,
+  },
+
+  imageSrc: "./assets/kenji/Idle.png",
+  framesMax: 4,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 167,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./assets/kenji/Idle.png",
+      framesMax: 4,
+    },
+    run: {
+      imageSrc: "./assets/kenji/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./assets/kenji/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./assets/kenji/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./assets/kenji/Attack1.png",
+      framesMax: 4,
+    },
+    
+  },
+  attackBox: {
+    offset: {
+      x: -170,
+      y: 50
+    },
+    width: 170,
+    height: 50
   },
 
   color: "blue",
@@ -140,7 +187,7 @@ function animate() {
 
   //Utilizo update en vez de draw para que vaya redibujandose
   player.update();
-  //enemy.update();
+  enemy.update();
 
   //Para que no siga caminando solo
   player.velocity.x = 0;
@@ -162,35 +209,60 @@ function animate() {
   //Defino la animación del salto
   if (player.velocity.y < 0) {
     player.switchSprite("jump");
-  }else if(player.velocity.y > 0){
-    player.switchSprite("fall")
+  } else if (player.velocity.y > 0) {
+    player.switchSprite("fall");
   }
 
   //Movimiento del Enemigo/J2
   if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
     enemy.velocity.x = -5;
+    enemy.switchSprite("run");
   } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
     enemy.velocity.x = 5;
+    enemy.switchSprite("run");
+  }else {
+    enemy.switchSprite("idle");
   }
+
+  //Animación salto ememigo
+  if (enemy.velocity.y < 0) {
+    enemy.switchSprite("jump");
+  } else if (enemy.velocity.y > 0) {
+    enemy.switchSprite("fall");
+  }
+
 
   //Detección de colisión
   if (
     rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
-    player.isAttacking
+    player.isAttacking && player.framesCurrent === 4
   ) {
     player.isAttacking = false;
     enemy.health -= 20;
     document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
 
+  //Si el jugador falla
+  if (player.isAttacking && player.framesCurrent === 4){
+    player.isAttacking = false
+  }
+
+
+
   if (
     rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
-    enemy.isAttacking
+    enemy.isAttacking && enemy.framesCurrent === 2
   ) {
     enemy.isAttacking = false;
     player.health -= 20;
     document.querySelector("#playerHealth").style.width = player.health + "%";
   }
+
+  //Si el enemigo falla
+  if (enemy.isAttacking && enemy.framesCurrent === 2){
+    enemy.isAttacking = false
+  }
+
 
   //Acabar la partida en base a la vida de los jugadores
 
@@ -215,7 +287,7 @@ window.addEventListener("keydown", (event) => {
       break;
 
     case "w":
-      player.velocity.y = -15;
+      player.velocity.y = -20;
       break;
 
     case " ":
