@@ -36,5 +36,5 @@ El juego termina cuando:
   
 --------------------------------------Créditos----------------------------------------
 
-
+Google Fonts, TailWind Color Palette, GSAP CDN.
 Idea original de Chris Courses "JavaScript Fighting Game Tutorial with HTML Canvas".
