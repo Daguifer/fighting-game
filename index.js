@@ -200,6 +200,10 @@ function animate() {
   background.update();
   shop.update();
 
+  //Silueta
+  c.fillStyle = 'rgba(255,255,255, 0.12)'
+  c.fillRect(0,0,canvas.width,canvas.height)
+
   //Utilizo update en vez de draw para que vaya redibujandose
   player.update();
   enemy.update();
@@ -254,7 +258,9 @@ function animate() {
   ) {
     enemy.takeHit();
     player.isAttacking = false;
-    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    gsap.to('#enemyHealth', {
+      width: enemy.health + "%"
+    })
   }
 
   //Si el jugador falla
@@ -269,7 +275,9 @@ function animate() {
   ) {
     player.takeHit();
     enemy.isAttacking = false;
-    document.querySelector("#playerHealth").style.width = player.health + "%";
+    gsap.to('#playerHealth', {
+      width: player.health + "%"
+    })
   }
 
   //Si el enemigo falla
@@ -308,30 +316,31 @@ window.addEventListener("keydown", (event) => {
         player.attack();
         break;
     }
+  }
 
-    if (!enemy.dead) {
-      switch (event.key) {
-        //Teclas del Enemigo/J2
-        case "ArrowRight":
-          keys.ArrowRight.pressed = true;
-          enemy.lastKey = "ArrowRight";
-          break;
+  if (!enemy.dead) {
+    switch (event.key) {
+      //Teclas del Enemigo/J2
+      case "ArrowRight":
+        keys.ArrowRight.pressed = true;
+        enemy.lastKey = "ArrowRight";
+        break;
 
-        case "ArrowLeft":
-          keys.ArrowLeft.pressed = true;
-          enemy.lastKey = "ArrowLeft";
-          break;
+      case "ArrowLeft":
+        keys.ArrowLeft.pressed = true;
+        enemy.lastKey = "ArrowLeft";
+        break;
 
-        case "ArrowUp":
-          enemy.velocity.y = -20;
-          break;
+      case "ArrowUp":
+        enemy.velocity.y = -20;
+        break;
 
-        case "ArrowDown":
-          enemy.attack();
-          break;
-      }
+      case "ArrowDown":
+        enemy.attack();
+        break;
     }
   }
+
   console.log(event.key);
 });
 
