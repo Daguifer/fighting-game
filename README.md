@@ -1,4 +1,4 @@
-Este pequeño proyecto consiste en un videojuego de lucha 1v1 en el que se implementan funciones como las barras de vida, los timers, las hitboxes, 
+Este pequeño proyecto consiste en un videojuego de lucha 1v1 en el que se implementan funciones como las barras de vida, el timer, las hitboxes, 
 animaciones, etc...
 
 Realizado con HTML Canvas y JavaScript.
