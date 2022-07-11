@@ -3,7 +3,7 @@ animaciones, etc...
 
 Realizado con HTML Canvas y JavaScript.
 
-![image](https://user-images.githubusercontent.com/52897045/178221823-1b0fb30b-9b85-4f1a-a8bd-87d05db703ad.png)
+![image](https://user-images.githubusercontent.com/52897045/178226238-265be1de-de35-4378-a016-b71307f750c3.png)
 
 
 -------------------------------------How to Exe-------------------------------------
